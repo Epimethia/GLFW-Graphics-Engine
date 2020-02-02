@@ -19,6 +19,9 @@
     <Filter Include="Header Files\Input System">
       <UniqueIdentifier>{aa943499-2cbe-4d4e-880c-b1731aa75769}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameFramework">
+      <UniqueIdentifier>{cd8a1e10-92d5-4aab-ad5b-befd9d132d68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -31,6 +34,12 @@
       <Filter>Source Files\System</Filter>
     </ClCompile>
     <ClCompile Include="Command.cpp">
+      <Filter>Header Files\Input System</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Header Files\GameFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -42,6 +51,15 @@
       <Filter>Source Files\System</Filter>
     </ClInclude>
     <ClInclude Include="Command.h">
+      <Filter>Header Files\Input System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\GameFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultShader.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,12 +1,12 @@
 #pragma once
 #include "Dependencies/GLFW/include/glfw3.h"
 #include "Command.h"
-#include <map>
+#include <vector>
 
-
-struct Key {
+struct Keybind {
 	int KeyName;
 	int KeyAction;
+	std::vector<Command> CommandVector;
 	Command* Command;
 };
 
@@ -21,8 +21,7 @@ private:
 	Input& operator=(const Input&);
 
 	static Input* m_pInputInstance;
-	//Keybind map for <<key, action>, command>
-	static Key KeybindArray[10];
+	static std::vector<Keybind> KeybindVect;
 
 public:
 

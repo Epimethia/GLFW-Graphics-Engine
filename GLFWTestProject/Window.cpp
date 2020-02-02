@@ -1,7 +1,12 @@
+#include "Dependencies/Glew/include/glew.h"
+
 #include "Window.h"
 #include "Input.h"
 
 #include <random>
+#include "Shader.h"
+#include "DefaultShader.h"
+
 
 //Assigning static variables
 Window* Window::m_pWindowInstance = nullptr;
@@ -15,10 +20,10 @@ float Random() {
 	return static_cast<float>(distribution(generator)) / 10.0f;
 }
 
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 //Creates an instance of the window if none has been created.
 //Returns a pointer to the reference if otherwise.
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 Window* Window::GetInstance() {
 	if (!m_pWindowInstance) {
 		m_pWindowInstance = new Window();
@@ -26,18 +31,18 @@ Window* Window::GetInstance() {
 	return m_pWindowInstance;
 }
 
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 //Destroys the instance if there is one, and reassigns it to 
 //null, allowing another instance to be created.
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 void Window::DestroyInstance() {
 	delete m_pWindowInstance;
 	m_pWindowInstance = nullptr;
 }
 
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 //Inits GLFW and binds any required functionality
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 bool Window::InitGLFW() {
 	if (!glfwInit()) {
 		return false;
@@ -49,17 +54,25 @@ bool Window::InitGLFW() {
 	if (!CreateWindow()) {
 		return false;
 	}
-
 	InitInput();
 
 	glfwSwapInterval(1);
+
+	glewInit();
+
+	//Creating Default shader
+	Shader GlobalDefaultShader;
+	GlobalDefaultShader.SetShaderName("Default Shader");
+	GlobalDefaultShader.SetVertexShaderData(DefaultShaderData::VertexData);
+	GlobalDefaultShader.SetFragmentShaderData(DefaultShaderData::FragmentData);
+	GlobalDefaultShader.InitShader();
 	return true;
 }
 
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 //The main rendering loop. This loops until the window is given
 //the signal to close (glfwWindowShouldClose returns true)
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 void Window::Loop() {
 	while (!glfwWindowShouldClose(m_pWindowPtr)) {
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -75,10 +88,10 @@ void Window::Loop() {
 	DestroyWindow();
 }
 
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 //Initializes and creates the GLFW window. Returns a window 
 //reference on successful creation.
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 GLFWwindow* Window::CreateWindow() {
 	//If there is already a window created, destroy it and create another
 	if (m_pWindowPtr) DestroyWindow();
@@ -93,19 +106,19 @@ GLFWwindow* Window::CreateWindow() {
 	
 }
 
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 //Initializes the input handler and binds the relevant functions
 //to the callback.
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 void Window::InitInput() {
 	m_pInputInstance = Input::GetInstance();
 	glfwSetKeyCallback(m_pWindowPtr, &m_pInputInstance->InputCallback);
 }
 
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 //Calls GLFW to destroy the window context and terminates the
 //program, exiting.
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
 void Window::DestroyWindow() {
 	glfwDestroyWindow(m_pWindowPtr);
 	m_pWindowPtr = nullptr;
@@ -113,8 +126,8 @@ void Window::DestroyWindow() {
 	exit(EXIT_SUCCESS);
 }
 
-//------------------------------------------------------------
-//------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void Window::GLFWErrorCallback(int error, const char* description) {
 	//todo: error callback
 }

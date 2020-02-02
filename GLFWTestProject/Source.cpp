@@ -1,4 +1,4 @@
-#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup ")
+//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup ")
 #include "Dependencies/GLFW/include/glfw3.h"
 
 #include "Window.h"
@@ -9,6 +9,7 @@ int main() {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
+	
 
 	Window::GetInstance()->Loop();
 
