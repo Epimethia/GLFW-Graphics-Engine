@@ -1,4 +1,4 @@
-#include "Dependencies/Glew/include/glew.h"
+#include "Dependencies/GLEW/include/glew.h"
 
 #include "Window.h"
 #include "Input.h"
@@ -6,6 +6,8 @@
 #include <random>
 #include "Shader.h"
 #include "DefaultShader.h"
+#include "GameObject.h"
+
 
 
 //Assigning static variables
@@ -13,11 +15,15 @@ Window* Window::m_pWindowInstance = nullptr;
 GLFWwindow* Window::m_pWindowPtr = nullptr;
 Input* Window::m_pInputInstance = nullptr;
 
-std::default_random_engine generator;
-std::uniform_int_distribution<int> distribution(0, 10);
+Window::Window() {
+	m_GlobalDefaultShader = new Shader();
+	g = new GameObject();
+	float ratio = static_cast<float>(m_WindowWidth) / static_cast<float>(m_WindowHeight);
+	glm::mat4 Projection = glm::ortho(0.0f, static_cast<float>(m_WindowWidth) / 200.0f, 0.0f, static_cast<float>(m_WindowHeight) / 200.0f, -1.0f, 1.0f);
+	glm::mat4 View = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 Model = glm::mat4(1.0f);
 
-float Random() {
-	return static_cast<float>(distribution(generator)) / 10.0f;
+	m_MVPMatrix = Projection * View * Model;
 }
 
 //------------------------------------------------------------------------------
@@ -61,11 +67,14 @@ bool Window::InitGLFW() {
 	glewInit();
 
 	//Creating Default shader
-	Shader GlobalDefaultShader;
-	GlobalDefaultShader.SetShaderName("Default Shader");
-	GlobalDefaultShader.SetVertexShaderData(DefaultShaderData::VertexData);
-	GlobalDefaultShader.SetFragmentShaderData(DefaultShaderData::FragmentData);
-	GlobalDefaultShader.InitShader();
+	m_GlobalDefaultShader->SetShaderName("Default Shader");
+	m_GlobalDefaultShader->SetVertexShaderData(DefaultShaderData::VertexData);
+	m_GlobalDefaultShader->SetFragmentShaderData(DefaultShaderData::FragmentData);
+	m_GlobalDefaultShader->InitShader();
+
+	g->SetShader(m_GlobalDefaultShader);
+	g->Init();
+	g->SetMVPMatrix(m_MVPMatrix);
 	return true;
 }
 
@@ -76,11 +85,11 @@ bool Window::InitGLFW() {
 void Window::Loop() {
 	while (!glfwWindowShouldClose(m_pWindowPtr)) {
 		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(Random(), Random(), Random(), Random());
+		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
 
 		//Render here
-
+		g->Render();
 
 		glfwSwapBuffers(m_pWindowPtr);
 		glfwPollEvents();

@@ -25,5 +25,6 @@ public:
 	void SetVertexShaderData(std::string _ShaderData) { m_VertShaderData = _ShaderData; };
 	void SetFragmentShaderData(std::string _ShaderData) { m_FragShaderData = _ShaderData; };
 	void SetShaderName(std::string _ShaderName) { m_ShaderName = _ShaderName; };
+	unsigned int GetShaderProgram() { return m_ShaderProgramRef; };
 };
 

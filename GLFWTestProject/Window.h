@@ -1,6 +1,10 @@
 #pragma once
 #include <string>
+#include "Shader.h"
 #include "Dependencies/GLFW/include/glfw3.h"
+
+#include "Dependencies/GLM/gtc/matrix_transform.hpp"
+#include "Dependencies/GLM/gtc/type_ptr.hpp"
 
 //Class that handles the window setup and functionality
 
@@ -11,7 +15,7 @@ private:
 
 	//Method overloads. This prevents the unwanted construction,
 	//destruction. Also overloads creation via assignment and copying.
-	Window() {};
+	Window();
 	~Window() {};
 	Window(const Window&);
 	Window& operator=(const Window&);
@@ -42,7 +46,12 @@ private:
 	unsigned int m_WindowHeight = 480;
 	std::string m_WindowName = "Default Window Name";
 	static class Input* m_pInputInstance;
-	
+	Shader* m_GlobalDefaultShader;
+
+	class GameObject* g;
+
+	glm::mat4 m_MVPMatrix;
+
 public:
 
 	//Setters and getters

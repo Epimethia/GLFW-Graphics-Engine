@@ -45,7 +45,7 @@ bool Shader::InitShader() {
 	return true;
 }
 
-unsigned int Shader::CreateShader(GLenum _ShaderType, std::string _SourceData) {
+unsigned int Shader::CreateShader(unsigned int _ShaderType, std::string _SourceData) {
 
 	const char* ShaderSourceData = _SourceData.c_str();
 	const int ShaderSourceSize = static_cast<int>(_SourceData.size());
