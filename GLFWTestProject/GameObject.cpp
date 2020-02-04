@@ -1,18 +1,20 @@
 #include "GameObject.h"
-
+#include "Dependencies/GLM/gtc/matrix_transform.hpp"
+#include "Dependencies/GLM/glm.hpp"
+#include "Dependencies/GLM/gtc/type_ptr.hpp"
 GameObject::GameObject() {
 
 	//Make the object simply a square for now
 	m_VertexData.clear();
 
 	m_VertexData = { 
-		-0.5f, 0.5f, 0.0f, 1.0f, 0.5f, 0.5f, 0.5f,		//Bottom Left
-		-0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f,		//Top Left
-		0.5f, -0.5f, 1.0f, 0.0f, 0.5f, 0.5f, 0.5f,		//Top Right
+		10.0f, 10.0f, 0.0f, 1.0f, 0.5f, 0.5f, 0.5f,		//Bottom Left
+		10.0f, 300.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.5f,		//Top Left
+		300.0f, 300.0f, 1.0f, 0.0f, 0.5f, 0.5f, 0.5f,		//Top Right
 
-		0.5f, -0.5f, 1.0f, 0.0f, 0.5f, 0.5f, 0.5f,		//Top Right
-		0.5f, 0.5f, 1.0f, 1.0f, 0.5f, 0.5f, 0.5f,		//Bottom Right
-		-0.5f, 0.5f, 0.0f, 1.0f, 0.5f, 0.5f, 0.5f		//Bottom Left
+		300.0f, 300.0f, 1.0f, 0.0f, 0.5f, 0.5f, 0.5f,		//Top Right
+		300.0f, 10.0f, 1.0f, 1.0f, 0.5f, 0.5f, 0.5f,			//Bottom Right
+		10.0f, 10.0f, 0.0f, 1.0f, 0.5f, 0.5f, 0.5f			//Bottom Left
 	};
 
 }
@@ -68,16 +70,29 @@ void GameObject::Init() {
 
 void GameObject::Render() {
 	//init all the uniforms
-
 	////Setting the MVP location in the shader program
 	glUseProgram(m_ShaderProgram->GetShaderProgram());
-	glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram->GetShaderProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(m_MVPMatrix));
+
+	glm::mat4 Translation = glm::translate(glm::mat4(1.0f), glm::vec3(300.0f, 30.0f, 0.0f));
+	glm::mat4 Scale = glm::scale(glm::mat4(1.0f), glm::vec3(ObjectPosition, 1.0f));
+	glm::mat4 RotationZ = glm::rotate(glm::mat4(1.0f), glm::radians(ObjectRotation), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	m_MVPMatrix = m_VPMatrix * (Translation * RotationZ * Scale);
+	glUniformMatrix4fv(glGetUniformLocation(m_ShaderProgram->GetShaderProgram(), "InMVP"), 1, GL_FALSE, glm::value_ptr(m_MVPMatrix));
+
+	//Setting and binding the correct texture
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_Tex);
+
+	//Sending the texture to the GPU via uniform
+	glUniform1i(glGetUniformLocation(m_ShaderProgram->GetShaderProgram(), "InTex"), 0);
 
 	glBindVertexArray(m_VertexArrayObject);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDrawArrays(GL_TRIANGLES, 0, static_cast<int>(m_VertexData.size()));
 	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glUseProgram(0);
 
 }

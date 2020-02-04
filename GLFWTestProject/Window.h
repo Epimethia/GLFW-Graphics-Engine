@@ -50,7 +50,7 @@ private:
 
 	class GameObject* g;
 
-	glm::mat4 m_MVPMatrix;
+	glm::mat4 m_VPMatrix;
 
 public:
 

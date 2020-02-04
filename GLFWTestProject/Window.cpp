@@ -7,8 +7,7 @@
 #include "Shader.h"
 #include "DefaultShader.h"
 #include "GameObject.h"
-
-
+#include "AssetLoader.h"
 
 //Assigning static variables
 Window* Window::m_pWindowInstance = nullptr;
@@ -18,12 +17,10 @@ Input* Window::m_pInputInstance = nullptr;
 Window::Window() {
 	m_GlobalDefaultShader = new Shader();
 	g = new GameObject();
-	float ratio = static_cast<float>(m_WindowWidth) / static_cast<float>(m_WindowHeight);
-	glm::mat4 Projection = glm::ortho(0.0f, static_cast<float>(m_WindowWidth) / 200.0f, 0.0f, static_cast<float>(m_WindowHeight) / 200.0f, -1.0f, 1.0f);
-	glm::mat4 View = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 Model = glm::mat4(1.0f);
+	glm::mat4 Projection = glm::ortho(0.0f, static_cast<float>(m_WindowWidth), 0.0f, static_cast<float>(m_WindowHeight), -1.0f, 100.0f);
+	glm::mat4 View = glm::lookAt(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-	m_MVPMatrix = Projection * View * Model;
+	m_VPMatrix = Projection * View;
 }
 
 //------------------------------------------------------------------------------
@@ -71,10 +68,12 @@ bool Window::InitGLFW() {
 	m_GlobalDefaultShader->SetVertexShaderData(DefaultShaderData::VertexData);
 	m_GlobalDefaultShader->SetFragmentShaderData(DefaultShaderData::FragmentData);
 	m_GlobalDefaultShader->InitShader();
-
+	AssetLoader::LoadTextures();
 	g->SetShader(m_GlobalDefaultShader);
 	g->Init();
-	g->SetMVPMatrix(m_MVPMatrix);
+	g->SetVPMatrix(m_VPMatrix);
+	g->SetTexture(AssetLoader::TextureMap.find(std::string("TEX_BRICK"))->second);
+
 	return true;
 }
 

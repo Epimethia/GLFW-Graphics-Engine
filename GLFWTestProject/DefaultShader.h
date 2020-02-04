@@ -15,39 +15,28 @@ public:
 //Vertex Shader
 const char* DefaultShaderData::VertexData =
 "#version 430\n"
-"uniform mat4 MVP;\n"
-"layout (location = 0) in vec2 VPos;\n"
-"layout (location = 2) in vec3 VCol;\n"
-"out vec3 color;\n"
-"out mat4 mvp;\n"
+"uniform mat4 InMVP;\n"
+"layout (location = 0) in vec2 InPosition;\n"
+"layout (location = 1) in vec2 InTexCoord;\n"
+"layout (location = 2) in vec3 InColor;\n"
+"out vec3 fragColor;\n"
+"out vec2 fragTexCoord;\n"
 "void main()\n"
 "{\n"
-"    gl_Position = MVP * vec4(VPos, 0.0f, 1.0f);\n"
-"    color = VCol;\n"
-"    mvp = MVP;\n"
+"    gl_Position = InMVP * vec4(InPosition, 0.0f, 1.0f);\n"
+"    fragColor = InColor;\n"
+"    fragTexCoord = InTexCoord;\n"
 "}\n";
 
 //Fragment Shader
 const char* DefaultShaderData::FragmentData =
 "#version 430\n"
-"in vec3 color;\n"
-"in mat4 mvp;\n"
+"in vec3 fragColor;\n"
+"in vec2 fragTexCoord;\n"
+"uniform sampler2D InTex;\n"
 "void main()\n"
 "{\n"
-//"    gl_FragColor = vec4(mvp[1][0], mvp[0][0], mvp[0][0], 1.0f);\n"
-"    gl_FragColor = vec4(0.0f, 1.0f, 1.0f, 1.0f);\n"
+"    gl_FragColor = texture(InTex, fragTexCoord);\n"
+//"    gl_FragColor = vec4(0.0f, 1.0f, 1.0f, 1.0f);\n"
 "}\n";
 
-
-////Vertex Shader
-//const char* DefaultShaderData::VertexData =
-//"#version 430\n"
-//"uniform mat4 MVP;\n"
-//"attribute vec3 VCol;\n"
-//"attribute vec2 VPos;\n"
-//"varying vec3 color;\n"
-//"void main()\n"
-//"{\n"
-//"    gl_Position = vec4(VPos, 0.0f, 1.0f);\n"
-//"    color = VCol;\n"
-//"}\n";
