@@ -22,6 +22,10 @@ private:
 
 	static Window* m_pWindowInstance;
 
+	void FixedTick();
+	void Tick();
+	void Render();
+
 public:
 
 	static Window* GetInstance();
@@ -42,13 +46,29 @@ private:
 	static void GLFWErrorCallback(int error, const char* description);
 	//static void GLFW
 	
-	unsigned int m_WindowWidth = 640;
-	unsigned int m_WindowHeight = 480;
+	unsigned int m_WindowWidth = 512;
+	unsigned int m_WindowHeight = 704;
 	std::string m_WindowName = "Default Window Name";
 	static class Input* m_pInputInstance;
 	Shader* m_GlobalDefaultShader;
 
-	class GameObject* g;
+	double m_CurrentTime = 0.0;
+	double m_PreviousTime = 0.0;
+	double m_DeltaTime = 0.0;
+	double m_TicksPerSecond = 1.0;
+	double m_Timer = 0.0;
+	unsigned int m_ElapsedFrames = 0;
+	unsigned int m_UpdateTicks = 0;
+
+	class Tetronimo* b0;
+	class Tetronimo* b1;
+	class Tetronimo* b2;
+	class Tetronimo* b3;
+	class Tetronimo* b4;
+	class Tetronimo* b5;
+	class Tetronimo* b6;
+
+	class Sprite* BG;
 
 	glm::mat4 m_VPMatrix;
 
@@ -61,6 +81,8 @@ public:
 	void SetWindowHeight(unsigned int _Height) { m_WindowHeight = _Height; };
 	void SetWindowWidth(unsigned int _Width) { m_WindowWidth = _Width; };
 	void SetWindowName(std::string _WindowName) { m_WindowName = _WindowName; };
+	Shader* GetGlobalDefaultShader() { return m_GlobalDefaultShader; };
+	void SetTickRate(double _TicksPerSecond) { m_TicksPerSecond = _TicksPerSecond; };
 
 };
 

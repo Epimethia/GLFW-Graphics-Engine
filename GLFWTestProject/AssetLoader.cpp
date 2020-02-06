@@ -9,7 +9,14 @@ std::map<std::string, GLuint> AssetLoader::TextureMap;
 void AssetLoader::LoadTextures() {
 	//std::string DefaultPath = "";
 	//Load brick texture
-	TextureMap.insert(std::make_pair(std::string("TEX_BRICK"), LoadAsset("Assets/Textures/brick.png")));
+	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_BLUE"), LoadAsset("Assets/Textures/Brick Textures/blue.png")));
+	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_GREEN"), LoadAsset("Assets/Textures/Brick Textures/green.png")));
+	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_YELLOW"), LoadAsset("Assets/Textures/Brick Textures/yellow.png")));
+	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_PURPLE"), LoadAsset("Assets/Textures/Brick Textures/purple.png")));
+	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_ORANGE"), LoadAsset("Assets/Textures/Brick Textures/orange.png")));
+	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_RED"), LoadAsset("Assets/Textures/Brick Textures/red.png")));
+	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_CYAN"), LoadAsset("Assets/Textures/Brick Textures/cyan.png")));
+	TextureMap.insert(std::make_pair(std::string("UI_BG_MAIN"), LoadAsset("Assets/Textures/UI/background.png")));
 }
 
 GLuint AssetLoader::LoadAsset(std::string _AssetFilePath) {

@@ -156,10 +156,12 @@
   <ItemGroup>
     <ClCompile Include="AssetLoader.cpp" />
     <ClCompile Include="Command.cpp" />
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Blocks.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Tetronimo.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -167,9 +169,11 @@
     <ClInclude Include="Command.h" />
     <ClInclude Include="DefaultShader.h" />
     <ClInclude Include="FilePaths.h" />
-    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Blocks.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Tetronimo.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -4,9 +4,10 @@
 #include "Input.h"
 
 #include <random>
+#include <iostream>
 #include "Shader.h"
 #include "DefaultShader.h"
-#include "GameObject.h"
+#include "Blocks.h"
 #include "AssetLoader.h"
 
 //Assigning static variables
@@ -16,11 +17,42 @@ Input* Window::m_pInputInstance = nullptr;
 
 Window::Window() {
 	m_GlobalDefaultShader = new Shader();
-	g = new GameObject();
 	glm::mat4 Projection = glm::ortho(0.0f, static_cast<float>(m_WindowWidth), 0.0f, static_cast<float>(m_WindowHeight), -1.0f, 100.0f);
 	glm::mat4 View = glm::lookAt(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	m_VPMatrix = Projection * View;
+}
+
+void Window::FixedTick() {
+	b0->Tick();
+	b1->Tick();
+	b2->Tick();
+	b3->Tick();
+	b4->Tick();
+	b5->Tick();
+	b6->Tick();
+}
+
+void Window::Tick() {
+	//Unfixed tick stuff
+}
+
+void Window::Render() {
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	BG->Render();
+
+	//Render here
+	b0->Render();
+	b1->Render();
+	b2->Render();
+	b3->Render();
+	b4->Render();
+	b5->Render();
+	b6->Render();
+
+	glfwSwapBuffers(m_pWindowPtr);
+	glfwPollEvents();
 }
 
 //------------------------------------------------------------------------------
@@ -68,11 +100,52 @@ bool Window::InitGLFW() {
 	m_GlobalDefaultShader->SetVertexShaderData(DefaultShaderData::VertexData);
 	m_GlobalDefaultShader->SetFragmentShaderData(DefaultShaderData::FragmentData);
 	m_GlobalDefaultShader->InitShader();
+
 	AssetLoader::LoadTextures();
-	g->SetShader(m_GlobalDefaultShader);
-	g->Init();
-	g->SetVPMatrix(m_VPMatrix);
-	g->SetTexture(AssetLoader::TextureMap.find(std::string("TEX_BRICK"))->second);
+	b0 = new O_Block();
+	b0->SetVPMatrix(m_VPMatrix);
+	b0->Init();
+	b0->SetBlockPosition(glm::vec2(32.0f));
+	
+
+	b1 = new I_Block();
+	b1->SetVPMatrix(m_VPMatrix);
+	b1->Init();
+	b1->SetBlockPosition(glm::vec2(256.0f, 32.0f));
+
+	b2 = new T_Block();
+	b2->SetVPMatrix(m_VPMatrix);
+	b2->Init();
+	b2->SetBlockPosition(glm::vec2(128.0f, 32.0f));
+
+	b3 = new L_Block();
+	b3->SetVPMatrix(m_VPMatrix);
+	b3->Init();
+	b3->SetBlockPosition(glm::vec2(32.0f, 448.0f));
+
+	b4 = new J_Block();
+	b4->SetVPMatrix(m_VPMatrix);
+	b4->Init();
+	b4->SetBlockPosition(glm::vec2(160.0f, 448.0f));
+
+	b5 = new S_Block();
+	b5->SetVPMatrix(m_VPMatrix);
+	b5->Init();
+	b5->SetBlockPosition(glm::vec2(32.0f, 256.0f));
+
+	b6 = new Z_Block();
+	b6->SetVPMatrix(m_VPMatrix);
+	b6->Init();
+	b6->SetBlockPosition(glm::vec2(160.0f, 256.0f));
+
+	BG = new Sprite();
+	BG->SetVPMatrix(m_VPMatrix);
+	BG->SetTexture(AssetLoader::TextureMap.find("UI_BG_MAIN")->second);
+	BG->SetShader(m_GlobalDefaultShader);
+	BG->Init();
+	BG->SetObjectScale(glm::vec2(16.0f, 22.0f));
+	BG->SetObjectPosition(glm::vec2(0.0f));
+
 
 	return true;
 }
@@ -83,15 +156,31 @@ bool Window::InitGLFW() {
 //------------------------------------------------------------------------------
 void Window::Loop() {
 	while (!glfwWindowShouldClose(m_pWindowPtr)) {
-		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
+		//Fixed Time loop processing
+		m_CurrentTime = glfwGetTime();
+		m_DeltaTime += (m_CurrentTime - m_PreviousTime) / (1.0 / m_TicksPerSecond);
+		m_PreviousTime = m_CurrentTime;
 
-		//Render here
-		g->Render();
+		while (m_DeltaTime >= 1.0) {
 
-		glfwSwapBuffers(m_pWindowPtr);
-		glfwPollEvents();
+			FixedTick();
+			m_DeltaTime -= 1.0;
+			m_UpdateTicks++;
+
+		}
+
+		m_ElapsedFrames++;
+
+		//Print FPS/
+		if (glfwGetTime() - m_Timer > 1.0) {
+			m_Timer = glfwGetTime();
+			std::cout << "FPS: " << m_ElapsedFrames << " Updates:" << m_UpdateTicks << std::endl;
+			m_UpdateTicks = 0, m_ElapsedFrames = 0;
+		}
+
+		Render();
+
 	}
 	DestroyWindow();
 }
@@ -106,9 +195,11 @@ GLFWwindow* Window::CreateWindow() {
 	m_pWindowPtr = nullptr;
 
 	//Creating the window 
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	m_pWindowPtr = glfwCreateWindow(m_WindowWidth, m_WindowHeight, m_WindowName.c_str(), NULL, NULL);
 	if (m_pWindowPtr) {
 		glfwMakeContextCurrent(m_pWindowPtr);
+		glfwSetWindowPos(m_pWindowPtr, 25, 25);
 	}
 	return m_pWindowPtr;
 	
