@@ -37,6 +37,6 @@ const char* DefaultShaderData::FragmentData =
 "void main()\n"
 "{\n"
 "    gl_FragColor = texture(InTex, fragTexCoord);\n"
-//"    gl_FragColor = vec4(0.0f, 1.0f, 1.0f, 1.0f);\n"
+
 "}\n";
 

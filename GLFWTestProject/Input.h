@@ -30,5 +30,7 @@ public:
 	static void BindInput(int _Key, int _Action, Command* _Command);
 
 	static void InputCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+	static class Tetronimo* ActiveTet;
 };
 

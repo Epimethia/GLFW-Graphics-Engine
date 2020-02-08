@@ -44,11 +44,10 @@ private:
 	void DestroyWindow();
 
 	static void GLFWErrorCallback(int error, const char* description);
-	//static void GLFW
 	
-	unsigned int m_WindowWidth = 512;
-	unsigned int m_WindowHeight = 704;
-	std::string m_WindowName = "Default Window Name";
+	static unsigned int m_WindowWidth;
+	static unsigned int m_WindowHeight;
+	static std::string m_WindowName;
 	static class Input* m_pInputInstance;
 	Shader* m_GlobalDefaultShader;
 
@@ -75,12 +74,12 @@ private:
 public:
 
 	//Setters and getters
-	unsigned int GetWindowHeight() { return m_WindowHeight; };
-	unsigned int GetWindowWidth() { return m_WindowWidth; };
+	static unsigned int GetWindowHeight() { return m_WindowHeight; };
+	static unsigned int GetWindowWidth() { return m_WindowWidth; };
 	std::string GetWindowName() { return m_WindowName; };
-	void SetWindowHeight(unsigned int _Height) { m_WindowHeight = _Height; };
-	void SetWindowWidth(unsigned int _Width) { m_WindowWidth = _Width; };
-	void SetWindowName(std::string _WindowName) { m_WindowName = _WindowName; };
+	static void SetWindowHeight(unsigned int _Height) { m_WindowHeight = _Height; };
+	static void SetWindowWidth(unsigned int _Width) { m_WindowWidth = _Width; };
+	static void SetWindowName(std::string _WindowName) { m_WindowName = _WindowName; };
 	Shader* GetGlobalDefaultShader() { return m_GlobalDefaultShader; };
 	void SetTickRate(double _TicksPerSecond) { m_TicksPerSecond = _TicksPerSecond; };
 

@@ -9,11 +9,18 @@
 #include "DefaultShader.h"
 #include "Blocks.h"
 #include "AssetLoader.h"
+#include "Sprite.h"
 
 //Assigning static variables
 Window* Window::m_pWindowInstance = nullptr;
 GLFWwindow* Window::m_pWindowPtr = nullptr;
 Input* Window::m_pInputInstance = nullptr;
+
+//unsigned int Window::m_WindowWidth = 512;
+//unsigned int Window::m_WindowHeight = 704;
+unsigned int Window::m_WindowWidth = 1280;
+unsigned int Window::m_WindowHeight = 768;
+std::string Window::m_WindowName = "Default Window Name";
 
 Window::Window() {
 	m_GlobalDefaultShader = new Shader();
@@ -25,12 +32,13 @@ Window::Window() {
 
 void Window::FixedTick() {
 	b0->Tick();
+
 	b1->Tick();
 	b2->Tick();
-	b3->Tick();
-	b4->Tick();
-	b5->Tick();
-	b6->Tick();
+	//b3->Tick();
+	//b4->Tick();
+	//b5->Tick();
+	//b6->Tick();
 }
 
 void Window::Tick() {
@@ -50,6 +58,14 @@ void Window::Render() {
 	b4->Render();
 	b5->Render();
 	b6->Render();
+
+	//b0->RenderDebug();
+	//b1->RenderDebug();
+	//b2->RenderDebug();
+	//b3->RenderDebug();
+	//b4->RenderDebug();
+	//b5->RenderDebug();
+	//b6->RenderDebug();
 
 	glfwSwapBuffers(m_pWindowPtr);
 	glfwPollEvents();
@@ -105,48 +121,52 @@ bool Window::InitGLFW() {
 	b0 = new O_Block();
 	b0->SetVPMatrix(m_VPMatrix);
 	b0->Init();
-	b0->SetBlockPosition(glm::vec2(32.0f));
-	
+	b0->SetActive(true);
+	b0->SetBlockGridPosition(6, 20);
+	//b0->SetBlockPosition(glm::vec2(160.0f));
 
 	b1 = new I_Block();
 	b1->SetVPMatrix(m_VPMatrix);
 	b1->Init();
-	b1->SetBlockPosition(glm::vec2(256.0f, 32.0f));
+	b1->SetBlockGridPosition(6, 1);
+	//b1->SetBlockPosition(glm::vec2(160.0f));
+	b1->SetActive(true);
 
 	b2 = new T_Block();
 	b2->SetVPMatrix(m_VPMatrix);
 	b2->Init();
-	b2->SetBlockPosition(glm::vec2(128.0f, 32.0f));
+	b2->SetBlockGridPosition(6, 1);
+	b2->SetActive(true);
 
 	b3 = new L_Block();
 	b3->SetVPMatrix(m_VPMatrix);
 	b3->Init();
-	b3->SetBlockPosition(glm::vec2(32.0f, 448.0f));
+	b3->SetBlockGridPosition(6, 6);
 
 	b4 = new J_Block();
 	b4->SetVPMatrix(m_VPMatrix);
 	b4->Init();
-	b4->SetBlockPosition(glm::vec2(160.0f, 448.0f));
+	b4->SetBlockGridPosition(6, 6);
 
 	b5 = new S_Block();
 	b5->SetVPMatrix(m_VPMatrix);
 	b5->Init();
-	b5->SetBlockPosition(glm::vec2(32.0f, 256.0f));
+	b5->SetBlockGridPosition(6, 10);
 
 	b6 = new Z_Block();
 	b6->SetVPMatrix(m_VPMatrix);
 	b6->Init();
-	b6->SetBlockPosition(glm::vec2(160.0f, 256.0f));
+	b6->SetBlockGridPosition(6, 10);
 
 	BG = new Sprite();
 	BG->SetVPMatrix(m_VPMatrix);
 	BG->SetTexture(AssetLoader::TextureMap.find("UI_BG_MAIN")->second);
 	BG->SetShader(m_GlobalDefaultShader);
 	BG->Init();
-	BG->SetObjectScale(glm::vec2(16.0f, 22.0f));
+	BG->SetObjectScale(glm::vec2(40.0f, 24.0f));
 	BG->SetObjectPosition(glm::vec2(0.0f));
 
-
+	Input::ActiveTet = b0;
 	return true;
 }
 
@@ -172,12 +192,12 @@ void Window::Loop() {
 
 		m_ElapsedFrames++;
 
-		//Print FPS/
-		if (glfwGetTime() - m_Timer > 1.0) {
-			m_Timer = glfwGetTime();
-			std::cout << "FPS: " << m_ElapsedFrames << " Updates:" << m_UpdateTicks << std::endl;
-			m_UpdateTicks = 0, m_ElapsedFrames = 0;
-		}
+		////Print FPS/
+		//if (glfwGetTime() - m_Timer > 1.0) {
+		//	m_Timer = glfwGetTime();
+		//	std::cout << "FPS: " << m_ElapsedFrames << " Updates:" << m_UpdateTicks << std::endl;
+		//	m_UpdateTicks = 0, m_ElapsedFrames = 0;
+		//}
 
 		Render();
 

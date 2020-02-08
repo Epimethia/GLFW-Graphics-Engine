@@ -1,7 +1,9 @@
 #include "Input.h"
 #include "Command.h"
+#include "Tetronimo.h"
 
 Input* Input::m_pInputInstance = nullptr;
+Tetronimo* Input::ActiveTet = nullptr;
 
 Input* Input::GetInstance() {
 	if (!m_pInputInstance) {
@@ -24,5 +26,23 @@ void Input::InputCallback(GLFWwindow* window, int key, int scancode, int action,
 		glfwSetWindowShouldClose(window, GLFW_TRUE);
 	}
 	
-	//Passing the curre
+	if (!ActiveTet) return;
+	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+		ActiveTet->Translate (1, 0);
+	}
+	
+	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+		ActiveTet->Translate(-1, 0);
+	}
+
+	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
+		ActiveTet->Translate(0, -1);
+	}
+
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+		bool reachedBottom = true;
+		while (reachedBottom) {
+			reachedBottom = ActiveTet->Translate(0, -1);
+		}
+	}
 }

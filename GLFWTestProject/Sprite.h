@@ -31,6 +31,7 @@ public:
 
 	void Init();
 	void Render();
+	void RenderDebug();
 
 	//void SetProgram(GLuint _Program) { m_ShaderProgram = _Program; };
 	void SetShader(Shader* _Shader) { m_ShaderProgram = _Shader; };
@@ -39,6 +40,7 @@ public:
 	void SetObjectPosition(glm::vec2 _Position) { m_ObjectPosition = _Position; };
 	glm::vec2 GetObjectPosition() { return m_ObjectPosition; };
 	void SetLocalOffset(glm::vec2 _LocalOffset) { m_LocalOffset = _LocalOffset; };
+	glm::vec2 GetLocalOffset() { return m_LocalOffset; };
 	void SetObjectScale(glm::vec2 _ObjectScale) { m_ObjectScale = _ObjectScale; };
 };
 
