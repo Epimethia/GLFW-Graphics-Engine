@@ -74,7 +74,7 @@ void Sprite::Render() {
 	////Setting the MVP location in the shader program
 	glUseProgram(m_ShaderProgram->GetShaderProgram());
 
-	glm::mat4 Translation = glm::translate(glm::mat4(1.0f), glm::vec3((m_ObjectPosition + m_LocalOffset), 0.0f));
+	glm::mat4 Translation = glm::translate(glm::mat4(1.0f), glm::vec3(m_ObjectPosition + m_LocalOffset, 0.0f));
 	glm::mat4 Scale = glm::scale(glm::mat4(1.0f), glm::vec3(m_ObjectScale, 1.0f));
 	glm::mat4 RotationZ = glm::rotate(glm::mat4(1.0f), glm::radians(m_ObjectRotation), glm::vec3(0.0f, 0.0f, 1.0f));
 

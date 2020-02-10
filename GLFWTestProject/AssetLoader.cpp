@@ -2,24 +2,30 @@
 
 #include "Dependencies/SOIL/include/SOIL.h"
 #include "Dependencies/GLFW/include/glfw3.h"
+#include "Shader.h"
+#include "DefaultShader.h"
 #include <iostream>
 
 std::map<std::string, GLuint> AssetLoader::TextureMap;
+std::map<std::string, Shader*> AssetLoader::ShaderMap;
 
-void AssetLoader::LoadTextures() {
+void AssetLoader::LoadAssets() {
 	//std::string DefaultPath = "";
 	//Load brick texture
-	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_BLUE"), LoadAsset("Assets/Textures/Brick Textures/blue.png")));
-	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_GREEN"), LoadAsset("Assets/Textures/Brick Textures/green.png")));
-	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_YELLOW"), LoadAsset("Assets/Textures/Brick Textures/yellow.png")));
-	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_PURPLE"), LoadAsset("Assets/Textures/Brick Textures/purple.png")));
-	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_ORANGE"), LoadAsset("Assets/Textures/Brick Textures/orange.png")));
-	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_RED"), LoadAsset("Assets/Textures/Brick Textures/red.png")));
-	TextureMap.insert(std::make_pair(std::string("TEX_BRICK_CYAN"), LoadAsset("Assets/Textures/Brick Textures/cyan.png")));
-	TextureMap.insert(std::make_pair(std::string("UI_BG_MAIN"), LoadAsset("Assets/Textures/UI/background.png")));
+	TextureMap.insert(LoadAsset("TEX_BRICK_BLUE","Assets/Textures/Brick Textures/blue.png"));
+	TextureMap.insert(LoadAsset("TEX_BRICK_GREEN","Assets/Textures/Brick Textures/green.png"));
+	TextureMap.insert(LoadAsset("TEX_BRICK_YELLOW","Assets/Textures/Brick Textures/yellow.png"));
+	TextureMap.insert(LoadAsset("TEX_BRICK_PURPLE","Assets/Textures/Brick Textures/purple.png"));
+	TextureMap.insert(LoadAsset("TEX_BRICK_ORANGE","Assets/Textures/Brick Textures/orange.png"));
+	TextureMap.insert(LoadAsset("TEX_BRICK_RED","Assets/Textures/Brick Textures/red.png"));
+	TextureMap.insert(LoadAsset("TEX_BRICK_CYAN","Assets/Textures/Brick Textures/cyan.png"));
+	TextureMap.insert(LoadAsset("TEX_BRICK_GRAY","Assets/Textures/Brick Textures/gray.png"));
+	TextureMap.insert(LoadAsset("UI_BG_MAIN","Assets/Textures/UI/background.png"));
+
+	ShaderMap.insert(LoadShader("DEFAULT_SHADER", DefaultShaderData::VertexData, DefaultShaderData::FragmentData));
 }
 
-GLuint AssetLoader::LoadAsset(std::string _AssetFilePath) {
+std::pair<std::string, GLuint> AssetLoader::LoadAsset(std::string _TextureName, std::string _AssetFilePath) {
 	GLuint Tex;
 	
 	glGenTextures(1, &Tex);
@@ -61,8 +67,14 @@ GLuint AssetLoader::LoadAsset(std::string _AssetFilePath) {
 	SOIL_free_image_data(ImageData);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	GLboolean ispresent;
-	bool failed = glAreTexturesResident(1, &Tex, &ispresent);
+	return std::make_pair(_TextureName, Tex);
+}
 
-	return Tex;
+std::pair<std::string, class Shader*> AssetLoader::LoadShader(std::string _ShaderName, const char* _VertData, const char* _FragData) {
+	Shader* s = new Shader();
+	s->SetShaderName(_ShaderName);
+	s->SetVertexShaderData(_VertData);
+	s->SetFragmentShaderData(_FragData);
+	s->InitShader();
+	return std::make_pair(_ShaderName, s);
 }

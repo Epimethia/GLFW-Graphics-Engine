@@ -5,17 +5,19 @@
 class O_Block : public Tetronimo {
 public:
 	
-	O_Block() { m_PerBlockOffset = { TetronimoSpacing, TetronimoSpacing }; };
+	O_Block() { m_PerBlockOffset = { TetronimoHalfSpacing , TetronimoHalfSpacing }; };
 	~O_Block() {};
 
+	virtual void SetBlockGridPosition(int _X, int _Y) override;
 	virtual void Init();
 };
 
 class I_Block : public Tetronimo {
 public:
-	I_Block() { m_PerBlockOffset = { 0.0f, 2.0f * TetronimoSpacing }; };
+	I_Block() { m_PerBlockOffset = { TetronimoHalfSpacing , TetronimoHalfSpacing }; };
 	~I_Block() {};
 
+	virtual void SetBlockGridPosition(int _X, int _Y) override;
 	virtual void Init();
 };
 

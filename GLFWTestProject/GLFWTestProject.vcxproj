@@ -155,7 +155,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetLoader.cpp" />
+    <ClCompile Include="Base_Block.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="GameObjects.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Blocks.cpp" />
@@ -166,9 +170,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetLoader.h" />
+    <ClInclude Include="Base_Block.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="DefaultShader.h" />
     <ClInclude Include="FilePaths.h" />
+    <ClInclude Include="GameObjects.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Blocks.h" />

@@ -6,10 +6,10 @@
 #include <random>
 #include <iostream>
 #include "Shader.h"
-#include "DefaultShader.h"
 #include "Blocks.h"
 #include "AssetLoader.h"
 #include "Sprite.h"
+#include "Camera.h"
 
 //Assigning static variables
 Window* Window::m_pWindowInstance = nullptr;
@@ -23,11 +23,7 @@ unsigned int Window::m_WindowHeight = 768;
 std::string Window::m_WindowName = "Default Window Name";
 
 Window::Window() {
-	m_GlobalDefaultShader = new Shader();
-	glm::mat4 Projection = glm::ortho(0.0f, static_cast<float>(m_WindowWidth), 0.0f, static_cast<float>(m_WindowHeight), -1.0f, 100.0f);
-	glm::mat4 View = glm::lookAt(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
-	m_VPMatrix = Projection * View;
+	Camera::InitCamera();
 }
 
 void Window::FixedTick() {
@@ -35,10 +31,10 @@ void Window::FixedTick() {
 
 	b1->Tick();
 	b2->Tick();
-	//b3->Tick();
-	//b4->Tick();
-	//b5->Tick();
-	//b6->Tick();
+	b3->Tick();
+	b4->Tick();
+	b5->Tick();
+	b6->Tick();
 }
 
 void Window::Tick() {
@@ -59,13 +55,13 @@ void Window::Render() {
 	b5->Render();
 	b6->Render();
 
-	//b0->RenderDebug();
-	//b1->RenderDebug();
-	//b2->RenderDebug();
-	//b3->RenderDebug();
-	//b4->RenderDebug();
-	//b5->RenderDebug();
-	//b6->RenderDebug();
+	b0->RenderDebug();
+	b1->RenderDebug();
+	b2->RenderDebug();
+	b3->RenderDebug();
+	b4->RenderDebug();
+	b5->RenderDebug();
+	b6->RenderDebug();
 
 	glfwSwapBuffers(m_pWindowPtr);
 	glfwPollEvents();
@@ -95,6 +91,7 @@ void Window::DestroyInstance() {
 //Inits GLFW and binds any required functionality
 //------------------------------------------------------------------------------
 bool Window::InitGLFW() {
+
 	if (!glfwInit()) {
 		return false;
 	}
@@ -110,63 +107,60 @@ bool Window::InitGLFW() {
 	glfwSwapInterval(1);
 
 	glewInit();
+	AssetLoader::LoadAssets();
 
-	//Creating Default shader
-	m_GlobalDefaultShader->SetShaderName("Default Shader");
-	m_GlobalDefaultShader->SetVertexShaderData(DefaultShaderData::VertexData);
-	m_GlobalDefaultShader->SetFragmentShaderData(DefaultShaderData::FragmentData);
-	m_GlobalDefaultShader->InitShader();
 
-	AssetLoader::LoadTextures();
 	b0 = new O_Block();
-	b0->SetVPMatrix(m_VPMatrix);
+	b0->SetVPMatrix(Camera::GetVPMatrix());
 	b0->Init();
 	b0->SetActive(true);
-	b0->SetBlockGridPosition(6, 20);
+	b0->SetBlockGridPosition(2, 1);
 	//b0->SetBlockPosition(glm::vec2(160.0f));
 
 	b1 = new I_Block();
-	b1->SetVPMatrix(m_VPMatrix);
+	b1->SetVPMatrix(Camera::GetVPMatrix());
 	b1->Init();
-	b1->SetBlockGridPosition(6, 1);
+	b1->SetBlockGridPosition(7, 1);
 	//b1->SetBlockPosition(glm::vec2(160.0f));
 	b1->SetActive(true);
 
 	b2 = new T_Block();
-	b2->SetVPMatrix(m_VPMatrix);
+	b2->SetVPMatrix(Camera::GetVPMatrix());
 	b2->Init();
-	b2->SetBlockGridPosition(6, 1);
+	b2->SetBlockGridPosition(2, 14);
 	b2->SetActive(true);
 
 	b3 = new L_Block();
-	b3->SetVPMatrix(m_VPMatrix);
+	b3->SetVPMatrix(Camera::GetVPMatrix());
 	b3->Init();
-	b3->SetBlockGridPosition(6, 6);
+	b3->SetBlockGridPosition(7, 6);
 
 	b4 = new J_Block();
-	b4->SetVPMatrix(m_VPMatrix);
+	b4->SetVPMatrix(Camera::GetVPMatrix());
 	b4->Init();
-	b4->SetBlockGridPosition(6, 6);
+	b4->SetBlockGridPosition(2, 6);
 
 	b5 = new S_Block();
-	b5->SetVPMatrix(m_VPMatrix);
+	b5->SetVPMatrix(Camera::GetVPMatrix());
 	b5->Init();
-	b5->SetBlockGridPosition(6, 10);
+	b5->SetBlockGridPosition(7, 10);
 
 	b6 = new Z_Block();
-	b6->SetVPMatrix(m_VPMatrix);
+	b6->SetVPMatrix(Camera::GetVPMatrix());
 	b6->Init();
-	b6->SetBlockGridPosition(6, 10);
+	b6->SetBlockGridPosition(2, 10);
 
 	BG = new Sprite();
-	BG->SetVPMatrix(m_VPMatrix);
+	BG->SetVPMatrix(Camera::GetVPMatrix());
 	BG->SetTexture(AssetLoader::TextureMap.find("UI_BG_MAIN")->second);
-	BG->SetShader(m_GlobalDefaultShader);
+	BG->SetShader(AssetLoader::ShaderMap.find("DEFAULT_SHADER")->second);
 	BG->Init();
 	BG->SetObjectScale(glm::vec2(40.0f, 24.0f));
 	BG->SetObjectPosition(glm::vec2(0.0f));
 
 	Input::ActiveTet = b0;
+
+	Input::TetVect = { b0, b1, b2, b3, b4, b5, b6 };
 	return true;
 }
 

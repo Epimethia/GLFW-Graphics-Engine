@@ -4,6 +4,7 @@
 
 Input* Input::m_pInputInstance = nullptr;
 Tetronimo* Input::ActiveTet = nullptr;
+std::vector<class Tetronimo*> Input::TetVect;
 
 Input* Input::GetInstance() {
 	if (!m_pInputInstance) {
@@ -26,23 +27,44 @@ void Input::InputCallback(GLFWwindow* window, int key, int scancode, int action,
 		glfwSetWindowShouldClose(window, GLFW_TRUE);
 	}
 	
-	if (!ActiveTet) return;
+	//if (!ActiveTet) return;
 	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
-		ActiveTet->Translate (1, 0);
+		for (auto it : TetVect) {
+			it->Translate(1, 0);
+		}
+	}
+
+	if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
+		for (auto it : TetVect) {
+			it->RotateLeft();
+		}
+	}
+
+	if (key == GLFW_KEY_X && action == GLFW_PRESS) {
+		for (auto it : TetVect) {
+			it->RotateRight();
+		}
 	}
 	
 	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
-		ActiveTet->Translate(-1, 0);
+		for (auto it : TetVect) {
+			it->Translate(-1, 0);
+		}
 	}
 
 	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
-		ActiveTet->Translate(0, -1);
+		for (auto it : TetVect) {
+			it->Translate(0, -1);
+		}
 	}
 
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-		bool reachedBottom = true;
-		while (reachedBottom) {
-			reachedBottom = ActiveTet->Translate(0, -1);
+		for (auto it : TetVect) {
+			bool reachedBottom = true;
+			while (reachedBottom) {
+				reachedBottom = it->Translate(0, -1);
+			}
 		}
+		
 	}
 }

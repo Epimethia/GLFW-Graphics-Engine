@@ -32,5 +32,6 @@ public:
 	static void InputCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 	static class Tetronimo* ActiveTet;
+	static std::vector<class Tetronimo*> TetVect;
 };
 

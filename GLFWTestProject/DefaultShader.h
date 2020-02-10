@@ -9,6 +9,8 @@ class DefaultShaderData {
 public:
 
 	static const char* VertexData;
+
+
 	static const char* FragmentData;
 };
 

@@ -5,8 +5,7 @@
 class Tetronimo {
 
 protected:
-	std::vector<class Sprite*> m_BlockVector;
-	class Shader* m_ShaderProgram = nullptr;
+	std::vector<class Base_Block*> m_BlockVector;
 
 	glm::mat4 m_VPMatrix = glm::mat4(1.0f);
 	glm::vec2 m_BlockOriginPosition = { 50.0f, 50.0f };
@@ -29,7 +28,7 @@ public:
 
 	void SetVPMatrix(glm::mat4 _VPMatrix) { m_VPMatrix = _VPMatrix; };
 	virtual void SetBlockPosition(glm::vec2 _Position);
-	void SetBlockGridPosition(int _X, int _Y);
+	virtual void SetBlockGridPosition(int _X, int _Y);
 	int GetBlockGridXPos() { return static_cast<int>(std::floor(m_BlockOriginPosition.x / TetronimoSpacing)); };
 	int GetBlockGridYPos() { return static_cast<int>(std::floor(m_BlockOriginPosition.y / TetronimoSpacing)); };
 	void SetActive(bool _IsActive) { m_IsActive = _IsActive; };

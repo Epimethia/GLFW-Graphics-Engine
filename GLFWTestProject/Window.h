@@ -49,7 +49,6 @@ private:
 	static unsigned int m_WindowHeight;
 	static std::string m_WindowName;
 	static class Input* m_pInputInstance;
-	Shader* m_GlobalDefaultShader;
 
 	double m_CurrentTime = 0.0;
 	double m_PreviousTime = 0.0;
@@ -59,17 +58,15 @@ private:
 	unsigned int m_ElapsedFrames = 0;
 	unsigned int m_UpdateTicks = 0;
 
-	class Tetronimo* b0;
-	class Tetronimo* b1;
-	class Tetronimo* b2;
-	class Tetronimo* b3;
-	class Tetronimo* b4;
-	class Tetronimo* b5;
-	class Tetronimo* b6;
+	class Tetronimo* b0 = nullptr;
+	class Tetronimo* b1 = nullptr;
+	class Tetronimo* b2 = nullptr;
+	class Tetronimo* b3 = nullptr;
+	class Tetronimo* b4 = nullptr;
+	class Tetronimo* b5 = nullptr;
+	class Tetronimo* b6 = nullptr;
 
 	class Sprite* BG;
-
-	glm::mat4 m_VPMatrix;
 
 public:
 
@@ -80,7 +77,6 @@ public:
 	static void SetWindowHeight(unsigned int _Height) { m_WindowHeight = _Height; };
 	static void SetWindowWidth(unsigned int _Width) { m_WindowWidth = _Width; };
 	static void SetWindowName(std::string _WindowName) { m_WindowName = _WindowName; };
-	Shader* GetGlobalDefaultShader() { return m_GlobalDefaultShader; };
 	void SetTickRate(double _TicksPerSecond) { m_TicksPerSecond = _TicksPerSecond; };
 
 };
