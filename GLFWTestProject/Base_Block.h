@@ -1,7 +1,7 @@
 #pragma once
 #include "Dependencies/GLM/glm.hpp"
 #include <string>
-#include "GameObject.h"
+#include "GameObjects.h"
 
 class Base_Block : public GameObject {
 public:
@@ -14,6 +14,7 @@ public:
 
 	void SetBlockPosition(glm::vec2 _Position);
 	glm::vec2 GetBlockPosition() { return m_BlockPosition; };
+	glm::vec2 GetBlockTruePosition() { return m_BlockPosition + m_LocalOffset; };
 	void SetLocalOffset(glm::vec2 _LocalOffset);
 	glm::vec2 GetLocalOffset() { return m_LocalOffset; };
 	void SetBlockTexture(std::string _TextureName);

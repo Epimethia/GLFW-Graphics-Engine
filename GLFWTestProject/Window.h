@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include "Shader.h"
 #include "Dependencies/GLFW/include/glfw3.h"
 
 #include "Dependencies/GLM/gtc/matrix_transform.hpp"
@@ -58,15 +57,8 @@ private:
 	unsigned int m_ElapsedFrames = 0;
 	unsigned int m_UpdateTicks = 0;
 
-	class Tetronimo* b0 = nullptr;
-	class Tetronimo* b1 = nullptr;
-	class Tetronimo* b2 = nullptr;
-	class Tetronimo* b3 = nullptr;
-	class Tetronimo* b4 = nullptr;
-	class Tetronimo* b5 = nullptr;
-	class Tetronimo* b6 = nullptr;
-
-	class Sprite* BG;
+	class GameManager* m_ActiveGameManager = nullptr;
+	class Scene* m_ActiveScene = nullptr;
 
 public:
 

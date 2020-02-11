@@ -108,6 +108,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)/Dependencies/GLFW/include;$(ProjectDir)/Dependencies/GLEW/include;$ProjectDir)/Dependencies/SOIL/include;$(ProjectDir)/Dependencies/GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,6 +144,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)/Dependencies/GLFW/include;$(ProjectDir)/Dependencies/GLEW/include;$ProjectDir)/Dependencies/SOIL/include;$(ProjectDir)/Dependencies/GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,6 +160,7 @@
     <ClCompile Include="Base_Block.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObjects.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -166,6 +169,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Tetronimo.cpp" />
+    <ClCompile Include="UIObject.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +179,7 @@
     <ClInclude Include="Command.h" />
     <ClInclude Include="DefaultShader.h" />
     <ClInclude Include="FilePaths.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObjects.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sprite.h" />
@@ -182,6 +187,7 @@
     <ClInclude Include="Blocks.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Tetronimo.h" />
+    <ClInclude Include="UIObject.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

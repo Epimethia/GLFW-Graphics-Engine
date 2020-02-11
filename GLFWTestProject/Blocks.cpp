@@ -87,8 +87,6 @@ void L_Block::Init() {
 	}
 
 	g = CreateBlock(m_BlockOriginPosition, glm::vec2((TetronimoHalfSpacing), TetronimoHalfSpacing), "TEX_BRICK_ORANGE");
-	g->m_Sprite->Init();
-	g->m_Sprite->SetVPMatrix(m_VPMatrix);
 	m_BlockVector.push_back(g);
 	g = nullptr;
 

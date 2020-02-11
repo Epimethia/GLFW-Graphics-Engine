@@ -2,6 +2,7 @@
 #include "Dependencies/GLM/gtc/matrix_transform.hpp"
 #include "Dependencies/GLM/glm.hpp"
 #include "Dependencies/GLM/gtc/type_ptr.hpp"
+#include "Camera.h"
 #include <iostream>
 Sprite::Sprite() {
 
@@ -67,6 +68,8 @@ void Sprite::Init() {
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	m_VPMatrix = Camera::GetVPMatrix();
+
 }
 
 void Sprite::Render() {
@@ -95,10 +98,6 @@ void Sprite::Render() {
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUseProgram(0);
-
-
-
-
 }
 
 void Sprite::RenderDebug() {

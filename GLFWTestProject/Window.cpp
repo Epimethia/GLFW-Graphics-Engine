@@ -1,67 +1,45 @@
-#include "Dependencies/GLEW/include/glew.h"
-
-#include "Window.h"
-#include "Input.h"
-
-#include <random>
 #include <iostream>
-#include "Shader.h"
-#include "Blocks.h"
+
+#include "Dependencies/GLEW/include/glew.h"
+#include "Window.h"
+
+#include "Input.h"
 #include "AssetLoader.h"
-#include "Sprite.h"
 #include "Camera.h"
+#include "Scene.h"
+#include "GameManager.h"
 
 //Assigning static variables
 Window* Window::m_pWindowInstance = nullptr;
 GLFWwindow* Window::m_pWindowPtr = nullptr;
 Input* Window::m_pInputInstance = nullptr;
 
-//unsigned int Window::m_WindowWidth = 512;
-//unsigned int Window::m_WindowHeight = 704;
 unsigned int Window::m_WindowWidth = 1280;
 unsigned int Window::m_WindowHeight = 768;
 std::string Window::m_WindowName = "Default Window Name";
 
 Window::Window() {
 	Camera::InitCamera();
+	m_ActiveScene = new Scene();
+	m_ActiveGameManager = new GameManager();
 }
 
 void Window::FixedTick() {
-	b0->Tick();
-
-	b1->Tick();
-	b2->Tick();
-	b3->Tick();
-	b4->Tick();
-	b5->Tick();
-	b6->Tick();
+	m_ActiveGameManager->FixedTick();
+	m_ActiveScene->FixedTick();
 }
 
 void Window::Tick() {
-	//Unfixed tick stuff
+	m_ActiveGameManager->Tick();
+	m_ActiveScene->Tick();
 }
 
 void Window::Render() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	BG->Render();
 
-	//Render here
-	b0->Render();
-	b1->Render();
-	b2->Render();
-	b3->Render();
-	b4->Render();
-	b5->Render();
-	b6->Render();
-
-	b0->RenderDebug();
-	b1->RenderDebug();
-	b2->RenderDebug();
-	b3->RenderDebug();
-	b4->RenderDebug();
-	b5->RenderDebug();
-	b6->RenderDebug();
+	//Render Here
+	m_ActiveScene->Render();
 
 	glfwSwapBuffers(m_pWindowPtr);
 	glfwPollEvents();
@@ -99,68 +77,21 @@ bool Window::InitGLFW() {
 	glfwSetErrorCallback(GLFWErrorCallback);
 
 	//Creating the window and setting OpenGL context to the created window
-	if (!CreateWindow()) {
-		return false;
-	}
-	InitInput();
+	if (!CreateWindow()) return false;
+
 
 	glfwSwapInterval(1);
-
 	glewInit();
+
+	InitInput();
+
+	Input::SetActiveGameManager(m_ActiveGameManager);
+	m_ActiveGameManager->SetActiveScene(m_ActiveScene);
+
 	AssetLoader::LoadAssets();
 
+	m_ActiveScene->Init();
 
-	b0 = new O_Block();
-	b0->SetVPMatrix(Camera::GetVPMatrix());
-	b0->Init();
-	b0->SetActive(true);
-	b0->SetBlockGridPosition(2, 1);
-	//b0->SetBlockPosition(glm::vec2(160.0f));
-
-	b1 = new I_Block();
-	b1->SetVPMatrix(Camera::GetVPMatrix());
-	b1->Init();
-	b1->SetBlockGridPosition(7, 1);
-	//b1->SetBlockPosition(glm::vec2(160.0f));
-	b1->SetActive(true);
-
-	b2 = new T_Block();
-	b2->SetVPMatrix(Camera::GetVPMatrix());
-	b2->Init();
-	b2->SetBlockGridPosition(2, 14);
-	b2->SetActive(true);
-
-	b3 = new L_Block();
-	b3->SetVPMatrix(Camera::GetVPMatrix());
-	b3->Init();
-	b3->SetBlockGridPosition(7, 6);
-
-	b4 = new J_Block();
-	b4->SetVPMatrix(Camera::GetVPMatrix());
-	b4->Init();
-	b4->SetBlockGridPosition(2, 6);
-
-	b5 = new S_Block();
-	b5->SetVPMatrix(Camera::GetVPMatrix());
-	b5->Init();
-	b5->SetBlockGridPosition(7, 10);
-
-	b6 = new Z_Block();
-	b6->SetVPMatrix(Camera::GetVPMatrix());
-	b6->Init();
-	b6->SetBlockGridPosition(2, 10);
-
-	BG = new Sprite();
-	BG->SetVPMatrix(Camera::GetVPMatrix());
-	BG->SetTexture(AssetLoader::TextureMap.find("UI_BG_MAIN")->second);
-	BG->SetShader(AssetLoader::ShaderMap.find("DEFAULT_SHADER")->second);
-	BG->Init();
-	BG->SetObjectScale(glm::vec2(40.0f, 24.0f));
-	BG->SetObjectPosition(glm::vec2(0.0f));
-
-	Input::ActiveTet = b0;
-
-	Input::TetVect = { b0, b1, b2, b3, b4, b5, b6 };
 	return true;
 }
 
@@ -183,7 +114,7 @@ void Window::Loop() {
 			m_UpdateTicks++;
 
 		}
-
+		Tick();
 		m_ElapsedFrames++;
 
 		////Print FPS/

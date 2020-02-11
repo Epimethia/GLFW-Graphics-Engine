@@ -7,7 +7,6 @@
 #include "Base_Block.h"
 
 
-
 float Tetronimo::TetronimoSpacing = 32.0f;
 float Tetronimo::TetronimoHalfSpacing = Tetronimo::TetronimoSpacing / 2.0f;
 
@@ -25,6 +24,10 @@ Tetronimo::Tetronimo() {
 }
 
 Tetronimo::~Tetronimo() {}
+
+void Tetronimo::Init() {
+
+}
 
 void Tetronimo::Render() {
 	for (auto BlockIt : m_BlockVector) {
@@ -65,12 +68,6 @@ void Tetronimo::RenderDebug() {
 
 }
 
-void Tetronimo::Tick() {
-	if (m_IsActive) {
-		SetBlockGridPosition(GetBlockGridXPos(), GetBlockGridYPos());
-	}
-}
-
 void Tetronimo::SetBlockPosition(glm::vec2 _Position) {
 	m_BlockOriginPosition = _Position;
 	m_BlockRotationOrigin = _Position + m_PerBlockOffset;
@@ -95,7 +92,6 @@ void Tetronimo::RotateRight() {
 
 		BlockIt->SetLocalOffset({ TranslatedY - m_PerBlockOffset.x, -TranslatedX - m_PerBlockOffset.y });
 	}
-	std::cout << "Rotate Right\n";
 }
 
 void Tetronimo::RotateLeft() {
@@ -105,7 +101,6 @@ void Tetronimo::RotateLeft() {
 
 		BlockIt->SetLocalOffset({ -TranslatedY - m_PerBlockOffset.x, TranslatedX - m_PerBlockOffset.y });
 	}
-	std::cout << "Rotate Left\n";
 }
 
 bool Tetronimo::Translate(int _X, int _Y) {
@@ -123,7 +118,7 @@ bool Tetronimo::Translate(int _X, int _Y) {
 
 		//Left Right Check
 		if ((BlockPosition.x < BottomLeftBounds.x) || (BlockPosition.x > TopRightBounds.x)) {
-			CanMove = false;
+			return false;
 			break;
 		};
 
@@ -133,10 +128,12 @@ bool Tetronimo::Translate(int _X, int _Y) {
 		}
 	}
 
-	if (CanMove == false) return false;
+	if (CanMove == false) {
+		m_IsActive = false;
+		return false;
+	}
 
 	//if successful, move the block
 	SetBlockGridPosition(GetBlockGridXPos() + _X, GetBlockGridYPos() + _Y);
-	std::cout << GetBlockGridXPos() << "|" << GetBlockGridYPos() << std::endl;
 	return true;
 }

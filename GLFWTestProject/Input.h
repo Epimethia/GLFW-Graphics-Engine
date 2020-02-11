@@ -23,6 +23,8 @@ private:
 	static Input* m_pInputInstance;
 	static std::vector<Keybind> KeybindVect;
 
+	static class GameManager* m_ActiveGameManager;
+
 public:
 
 	static Input* GetInstance();
@@ -30,8 +32,7 @@ public:
 	static void BindInput(int _Key, int _Action, Command* _Command);
 
 	static void InputCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	static void SetActiveGameManager(class GameManager* _GameManager) { m_ActiveGameManager = _GameManager; };
 
-	static class Tetronimo* ActiveTet;
-	static std::vector<class Tetronimo*> TetVect;
 };
 

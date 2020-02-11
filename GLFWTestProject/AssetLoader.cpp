@@ -8,24 +8,35 @@
 
 std::map<std::string, GLuint> AssetLoader::TextureMap;
 std::map<std::string, Shader*> AssetLoader::ShaderMap;
+std::vector<EBlockTypes> AssetLoader::RandomBagTemplateVect;
 
 void AssetLoader::LoadAssets() {
 	//std::string DefaultPath = "";
 	//Load brick texture
-	TextureMap.insert(LoadAsset("TEX_BRICK_BLUE","Assets/Textures/Brick Textures/blue.png"));
-	TextureMap.insert(LoadAsset("TEX_BRICK_GREEN","Assets/Textures/Brick Textures/green.png"));
-	TextureMap.insert(LoadAsset("TEX_BRICK_YELLOW","Assets/Textures/Brick Textures/yellow.png"));
-	TextureMap.insert(LoadAsset("TEX_BRICK_PURPLE","Assets/Textures/Brick Textures/purple.png"));
-	TextureMap.insert(LoadAsset("TEX_BRICK_ORANGE","Assets/Textures/Brick Textures/orange.png"));
-	TextureMap.insert(LoadAsset("TEX_BRICK_RED","Assets/Textures/Brick Textures/red.png"));
-	TextureMap.insert(LoadAsset("TEX_BRICK_CYAN","Assets/Textures/Brick Textures/cyan.png"));
-	TextureMap.insert(LoadAsset("TEX_BRICK_GRAY","Assets/Textures/Brick Textures/gray.png"));
-	TextureMap.insert(LoadAsset("UI_BG_MAIN","Assets/Textures/UI/background.png"));
+	TextureMap.insert(LoadTexture("TEX_BRICK_BLUE","Assets/Textures/Brick Textures/blue.png"));
+	TextureMap.insert(LoadTexture("TEX_BRICK_GREEN","Assets/Textures/Brick Textures/green.png"));
+	TextureMap.insert(LoadTexture("TEX_BRICK_YELLOW","Assets/Textures/Brick Textures/yellow.png"));
+	TextureMap.insert(LoadTexture("TEX_BRICK_PURPLE","Assets/Textures/Brick Textures/purple.png"));
+	TextureMap.insert(LoadTexture("TEX_BRICK_ORANGE","Assets/Textures/Brick Textures/orange.png"));
+	TextureMap.insert(LoadTexture("TEX_BRICK_RED","Assets/Textures/Brick Textures/red.png"));
+	TextureMap.insert(LoadTexture("TEX_BRICK_CYAN","Assets/Textures/Brick Textures/cyan.png"));
+	TextureMap.insert(LoadTexture("TEX_BRICK_GRAY","Assets/Textures/Brick Textures/gray.png"));
+	TextureMap.insert(LoadTexture("UI_BG_MAIN","Assets/Textures/UI/background.png"));
 
 	ShaderMap.insert(LoadShader("DEFAULT_SHADER", DefaultShaderData::VertexData, DefaultShaderData::FragmentData));
+
+	RandomBagTemplateVect = {
+		EBlockTypes::O_BLOCK,
+		EBlockTypes::I_BLOCK,
+		EBlockTypes::T_BLOCK,
+		EBlockTypes::J_BLOCK,
+		EBlockTypes::L_BLOCK,
+		EBlockTypes::S_BLOCK,
+		EBlockTypes::Z_BLOCK
+	};
 }
 
-std::pair<std::string, GLuint> AssetLoader::LoadAsset(std::string _TextureName, std::string _AssetFilePath) {
+std::pair<std::string, GLuint> AssetLoader::LoadTexture(std::string _TextureName, std::string _AssetFilePath) {
 	GLuint Tex;
 	
 	glGenTextures(1, &Tex);

@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
 #include "Dependencies/GLM/glm.hpp"
+#include "GameObjects.h"
 
-class Tetronimo {
+class Tetronimo : public GameObject {
 
 protected:
 	std::vector<class Base_Block*> m_BlockVector;
@@ -14,27 +15,28 @@ protected:
 
 	bool m_IsActive = false;
 
-	static float TetronimoSpacing;
-	static float TetronimoHalfSpacing;
-
 public:
 	Tetronimo();
 	~Tetronimo();
 
-	virtual void Init() = 0;
-	void Render();
+	virtual void Init() override;
+	virtual void Render() override;
 	void RenderDebug();
-	void Tick();
 
-	void SetVPMatrix(glm::mat4 _VPMatrix) { m_VPMatrix = _VPMatrix; };
 	virtual void SetBlockPosition(glm::vec2 _Position);
 	virtual void SetBlockGridPosition(int _X, int _Y);
 	int GetBlockGridXPos() { return static_cast<int>(std::floor(m_BlockOriginPosition.x / TetronimoSpacing)); };
 	int GetBlockGridYPos() { return static_cast<int>(std::floor(m_BlockOriginPosition.y / TetronimoSpacing)); };
-	void SetActive(bool _IsActive) { m_IsActive = _IsActive; };
+	void SetIsActive(bool _IsActive) { m_IsActive = _IsActive; };
+	bool GetIsActive() { return m_IsActive; };
+
+	std::vector<class Base_Block*>& GetBlockVector() { return m_BlockVector; };
 
 	void RotateRight();
 	void RotateLeft();
 	bool Translate(int _X, int _Y);
+
+	static float TetronimoSpacing;
+	static float TetronimoHalfSpacing;
 };
 
