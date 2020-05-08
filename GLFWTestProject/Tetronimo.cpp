@@ -19,6 +19,8 @@ std::string DebugVec2(glm::vec2 _Vec) {
 	return str;
 }
 
+void Tetronimo::MoveTetToPersistenGrid() {}
+
 Tetronimo::Tetronimo() {
 
 }
@@ -31,7 +33,9 @@ void Tetronimo::Init() {
 
 void Tetronimo::Render() {
 	for (auto BlockIt : m_BlockVector) {
-		BlockIt->Render();
+		if (BlockIt) {
+			BlockIt->Render();
+		}
 	}
 }
 
@@ -83,24 +87,6 @@ void Tetronimo::SetBlockGridPosition(int _X, int _Y) {
 	float y = static_cast<float>(_Y) * TetronimoSpacing;
 
 	SetBlockPosition(glm::vec2(x, y));
-}
-
-void Tetronimo::RotateRight() {
-	for (auto BlockIt : m_BlockVector) {
-		float TranslatedX = BlockIt->GetLocalOffset().x + m_PerBlockOffset.x;
-		float TranslatedY = BlockIt->GetLocalOffset().y + m_PerBlockOffset.y;
-
-		BlockIt->SetLocalOffset({ TranslatedY - m_PerBlockOffset.x, -TranslatedX - m_PerBlockOffset.y });
-	}
-}
-
-void Tetronimo::RotateLeft() {
-	for (auto BlockIt : m_BlockVector) {
-		float TranslatedX = BlockIt->GetLocalOffset().x + m_PerBlockOffset.x;
-		float TranslatedY = BlockIt->GetLocalOffset().y + m_PerBlockOffset.y;
-
-		BlockIt->SetLocalOffset({ -TranslatedY - m_PerBlockOffset.x, TranslatedX - m_PerBlockOffset.y });
-	}
 }
 
 bool Tetronimo::Translate(int _X, int _Y) {

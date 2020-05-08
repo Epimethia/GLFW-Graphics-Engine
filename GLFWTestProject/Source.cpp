@@ -9,7 +9,6 @@ int main() {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
-	
 
 	Window::GetInstance()->Loop();
 

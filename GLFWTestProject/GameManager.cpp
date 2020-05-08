@@ -31,12 +31,35 @@ void GameManager::Tick() {
 }
 
 void GameManager::RotateActiveTet(ERotationDirection _Direction) {
+
+	bool IsColliding = CheckRotation(_Direction);
+	std::cout << "IsColliding: " << IsColliding << std::endl;
+	if (IsColliding == true) {
+		return;
+	}
+
 	switch (_Direction) {
 		case ERotationDirection::CLOCKWISE:
-			m_ActivePiece->RotateRight();
+
+			for (auto BlockIt : m_ActivePiece->GetBlockVector()) {
+				glm::vec2 BlockOffset = m_ActivePiece->GetPerBlockOffset();
+				float TranslatedX = BlockIt->GetLocalOffset().x + BlockOffset.x;
+				float TranslatedY = BlockIt->GetLocalOffset().y + BlockOffset.y;
+
+				BlockIt->SetLocalOffset({ TranslatedY - BlockOffset.x, -TranslatedX - BlockOffset.y });
+			}
+
 			break;
 		case ERotationDirection::ANTI_CLOCKWISE:
-			m_ActivePiece->RotateLeft();
+
+			for (auto BlockIt : m_ActivePiece->GetBlockVector()) {
+				glm::vec2 BlockOffset = m_ActivePiece->GetPerBlockOffset();
+				float TranslatedX = BlockIt->GetLocalOffset().x + BlockOffset.x;
+				float TranslatedY = BlockIt->GetLocalOffset().y + BlockOffset.y;
+
+				BlockIt->SetLocalOffset({ -TranslatedY - BlockOffset.x, TranslatedX - BlockOffset.y });
+			}
+
 			break;
 		default: break;
 	}
@@ -55,9 +78,7 @@ void GameManager::TranslateActiveTet(int _X, int _Y) {
 		if (!CheckColliding(_X, _Y)) {
 			m_ActivePiece->Translate(_X, _Y);
 		}
-
 	}
-
 }
 
 void GameManager::HardDropTet() {
@@ -150,9 +171,138 @@ bool GameManager::CheckColliding(int _X, int _Y) {
 			glm::vec2 Difference = glm::abs(TranslatedPos - GridBlockPos);
 
 			if (Difference.y < Tetronimo::TetronimoSpacing && Difference.x < Tetronimo::TetronimoSpacing) {
-				return true;
+				return true; // if colliding
 			}
 		}
 	}
+	return false;
+}
+
+bool GameManager::CheckColliding(int _X, int _Y, std::vector<Base_Block*> _BlockVect) {
+	glm::vec2 Translation = { _X * Tetronimo::TetronimoSpacing, _Y * Tetronimo::TetronimoSpacing };
+
+	for (auto GridIt : PlayGrid) {
+		for (auto BlockIt : _BlockVect) {
+
+			glm::vec2 TranslatedPos = BlockIt->GetBlockTruePosition() + Translation;
+			glm::vec2 GridBlockPos = GridIt->GetBlockTruePosition();
+			glm::vec2 Difference = glm::abs(TranslatedPos - GridBlockPos);
+
+			if (Difference.y < Tetronimo::TetronimoSpacing && Difference.x < Tetronimo::TetronimoSpacing) {
+				return true; // if colliding
+			}
+		}
+	}
+	return false;
+}
+
+bool GameManager::CheckRotation(ERotationDirection _Direction) {
+	system("CLS");
+
+	std::vector<Base_Block> TempBlockVect;
+	for (auto TempBlockIt : m_ActivePiece->GetBlockVector()) {
+		TempBlockVect.push_back(*TempBlockIt);
+	}
+
+	glm::vec2 BlockOffset = m_ActivePiece->GetPerBlockOffset();
+
+	//Rotate the temp block vector
+	switch (_Direction) {
+
+		case ERotationDirection::CLOCKWISE: {
+
+			for (auto BlockIt : TempBlockVect) {
+				float TranslatedX = BlockIt.GetLocalOffset().x + BlockOffset.x;
+				float TranslatedY = BlockIt.GetLocalOffset().y + BlockOffset.y;
+
+				BlockIt.SetLocalOffset({ TranslatedY - BlockOffset.x, -TranslatedX - BlockOffset.y });
+			}
+
+			break;
+		}
+
+		case ERotationDirection::ANTI_CLOCKWISE: {
+
+			for (auto BlockIt : TempBlockVect) {
+				float TranslatedX = BlockIt.GetLocalOffset().x + BlockOffset.x;
+				float TranslatedY = BlockIt.GetLocalOffset().y + BlockOffset.y;
+
+				BlockIt.SetLocalOffset({ -TranslatedY - BlockOffset.x, TranslatedX - BlockOffset.y });
+			}
+
+			break;
+		}
+
+		default: break;
+	}
+
+
+
+	//Check if the block is colliding with anything
+	glm::vec2 BottomLeftBounds = { Tetronimo::TetronimoSpacing * 15, Tetronimo::TetronimoSpacing * 2 };
+	glm::vec2 TopRightBounds = { Tetronimo::TetronimoSpacing * 24, Tetronimo::TetronimoSpacing * 11 };
+
+	for (auto BlockIt : TempBlockVect) {
+		glm::vec2 BlockPosition = BlockIt.GetBlockTruePosition();
+
+		std::cout << "Block Position: {" << (BlockPosition.x - BottomLeftBounds.x) / Tetronimo::TetronimoSpacing << "," << (BlockPosition.y - BottomLeftBounds.y) / Tetronimo::TetronimoSpacing << "} | ";
+
+		//Left Right Check
+		if ((BlockPosition.x < BottomLeftBounds.x) || (BlockPosition.x > TopRightBounds.x)) {
+			std::cout << "Colliding x: " << BlockPosition.x - BottomLeftBounds.x << std::endl;
+			return true;
+		};
+
+		if (BlockPosition.y < BottomLeftBounds.y) {
+			std::cout << "Colliding y: " << BlockPosition.y - BottomLeftBounds.y << std::endl;
+			return true;
+		}
+		std::cout << std::endl;
+	}
+
+	std::cout << "Not Colliding\n";
+	//int DesiredRotationIndex = static_cast<int>(m_ActivePiece->GetCurrentRotation()) + 1;
+	//if (DesiredRotationIndex > 3) DesiredRotationIndex = 0;
+	//ECurrentRotation DesiredRotationEnum = static_cast<ECurrentRotation>(DesiredRotationIndex);
+
+	//std::vector<std::pair<int, int>> CurrentWallKickData;
+
+	//if (m_ActivePiece->GetTetronimoType() == ETetronimoType::I_BLOCK) {
+	//	switch (DesiredRotationEnum) {
+	//		case ECurrentRotation::RIGHT:
+	//			CurrentWallKickData = AssetLoader::WallKickDataMap.find("IBLOCK_UP_TO_RIGHT")->second;
+	//			break;
+	//		case ECurrentRotation::DOWN:
+	//			CurrentWallKickData = AssetLoader::WallKickDataMap.find("IBLOCK_RIGHT_TO_DOWN")->second;
+	//			break;
+	//		case ECurrentRotation::LEFT:
+	//			CurrentWallKickData = AssetLoader::WallKickDataMap.find("IBLOCK_DOWN_TO_LEFT")->second;
+	//			break;
+	//		case ECurrentRotation::UP:
+	//			CurrentWallKickData = AssetLoader::WallKickDataMap.find("IBLOCK_LEFT_TO_UP")->second;
+	//			break;
+	//		default: break;
+	//	}
+
+	//	int CurrentWallKickCheck = 0;
+	//	bool RotationFailed = true;
+
+	//	while (RotationFailed == true) {
+	//		int WallKickXOffset = CurrentWallKickData[CurrentWallKickCheck].first;
+	//		int WallKickYOffset = CurrentWallKickData[CurrentWallKickCheck].second;
+
+	//		RotationFailed = CheckColliding(WallKickXOffset, WallKickYOffset, TempBlockVect);
+
+	//		CurrentWallKickCheck++;
+
+	//		//If the current loop has gone through all 
+	//		if (CurrentWallKickCheck > 4) RotationFailed = false;
+	//		if (RotationFailed == false) break;
+	//	};
+
+	//	return RotationFailed;
+	//}
+	//m_ActivePiece->GetBlockVector() = TempBlockVect;
+
 	return false;
 }

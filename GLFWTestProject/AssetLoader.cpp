@@ -9,6 +9,7 @@
 std::map<std::string, GLuint> AssetLoader::TextureMap;
 std::map<std::string, Shader*> AssetLoader::ShaderMap;
 std::vector<EBlockTypes> AssetLoader::RandomBagTemplateVect;
+std::map<std::string, std::vector<std::pair<int, int>>> AssetLoader::WallKickDataMap;
 
 void AssetLoader::LoadAssets() {
 	//std::string DefaultPath = "";
@@ -34,6 +35,45 @@ void AssetLoader::LoadAssets() {
 		EBlockTypes::S_BLOCK,
 		EBlockTypes::Z_BLOCK
 	};
+
+	//standard block wall kick data
+	std::vector<std::pair<int, int>> UpToRightWallKickData = { {0, 0}, {-1, 0}, {-1, 1}, {0,-2}, {-1,-2}};
+	std::vector<std::pair<int, int>> RightToUpWallKickData = { {0, 0}, {1, 0}, {1,-1}, {0, 2}, {1, 2}};
+	std::vector<std::pair<int, int>> RightToDownWallKickData = { {0, 0}, {1, 0}, {1,-1}, {0, 2}, {1, 2}};
+	std::vector<std::pair<int, int>> DownToRightWallKickData = { {0, 0}, {-1, 0}, {-1, 1}, {0,-2}, {-1,-2}};
+	std::vector<std::pair<int, int>> DownToLeftWallKickData = { {0, 0}, {1, 0}, {1, 1}, {0,-2}, {1,-2}};
+	std::vector<std::pair<int, int>> LeftToDownWallKickData = { {0, 0},	{-1, 0}, {-1,-1}, {0, 2}, {-1, 2}};
+	std::vector<std::pair<int, int>> LeftToUpWallKickData = { {0, 0}, {-1, 0}, {-1,-1}, {0, 2}, {-1, 2}};
+	std::vector<std::pair<int, int>> UpToLeftWallKickData = { {0, 0}, {1, 0}, {1, 1}, {0,-2}, {1,-2}};
+	
+	//I Block Wall Kick Data
+	std::vector<std::pair<int, int>> IBlockUpToRightWallKickData = { {0, 0}, {-2, 0}, {1, 0}, {-2, -1}, {1, 2} };
+	std::vector<std::pair<int, int>> IBlockRightToUpWallKickData = { {0, 0}, {2, 0}, {-1, 0}, {2, 1}, {-1, -2} };
+	std::vector<std::pair<int, int>> IBlockRightToDownWallKickData = { {0, 0}, {-1, 0}, {2, 0}, {-1, 2}, {2, -1} };
+	std::vector<std::pair<int, int>> IBlockDownToRightWallKickData = { {0, 0}, {1, 0}, {-2, 0}, {1, -2}, {-2, 1} };
+	std::vector<std::pair<int, int>> IBlockDownToLeftWallKickData = { {0, 0}, {2, 0}, {-1, 0}, {2, 1}, {-1, -2} };
+	std::vector<std::pair<int, int>> IBlockLeftToDownWallKickData = { {0, 0}, {-2, 0}, {1, 0}, {-2, -1}, {1, 2} };
+	std::vector<std::pair<int, int>> IBlockLeftToUpWallKickData = { {0, 0}, {1, 0}, {-2, 0}, {1, -2}, {-2, 1} };
+	std::vector<std::pair<int, int>> IBlockUpToLeftWallKickData = { {0, 0}, {-1, 0}, {2, 0}, {-1, 2}, {2, -1} };
+
+	WallKickDataMap.insert(std::make_pair("UP_TO_RIGHT", UpToRightWallKickData));
+	WallKickDataMap.insert(std::make_pair("RIGHT_TO_UP", RightToUpWallKickData));
+	WallKickDataMap.insert(std::make_pair("RIGHT_TO_DOWN", RightToDownWallKickData));
+	WallKickDataMap.insert(std::make_pair("DOWN_TO_RIGHT", DownToRightWallKickData));
+	WallKickDataMap.insert(std::make_pair("DOWN_TO_LEFT", DownToLeftWallKickData));
+	WallKickDataMap.insert(std::make_pair("LEFT_TO_DOWN", LeftToDownWallKickData));
+	WallKickDataMap.insert(std::make_pair("LEFT_TO_UP", LeftToUpWallKickData));
+	WallKickDataMap.insert(std::make_pair("UP_TO_LEFT", UpToLeftWallKickData));
+
+	WallKickDataMap.insert(std::make_pair("IBLOCK_UP_TO_RIGHT", IBlockUpToRightWallKickData));
+	WallKickDataMap.insert(std::make_pair("IBLOCK_RIGHT_TO_UP", IBlockRightToUpWallKickData));
+	WallKickDataMap.insert(std::make_pair("IBLOCK_DOWN_TO_RIGHT", IBlockDownToRightWallKickData));
+	WallKickDataMap.insert(std::make_pair("IBLOCK_RIGHT_TO_DOWN", IBlockRightToDownWallKickData));
+	WallKickDataMap.insert(std::make_pair("IBLOCK_DOWN_TO_LEFT", IBlockDownToLeftWallKickData));
+	WallKickDataMap.insert(std::make_pair("IBLOCK_LEFT_TO_DOWN", IBlockLeftToDownWallKickData));
+	WallKickDataMap.insert(std::make_pair("IBLOCK_LEFT_TO_UP", IBlockLeftToUpWallKickData));
+	WallKickDataMap.insert(std::make_pair("IBLOCK_UP_TO_LEFT", IBlockUpToLeftWallKickData));
+
 }
 
 std::pair<std::string, GLuint> AssetLoader::LoadTexture(std::string _TextureName, std::string _AssetFilePath) {

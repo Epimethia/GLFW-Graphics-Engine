@@ -42,5 +42,7 @@ private:
 	std::random_device m_RandomGenerator;
 
 	bool CheckColliding(int _X, int _Y);
+	bool CheckColliding(int _X, int _Y, std::vector<Base_Block*> _BlockVect);
+	bool CheckRotation(ERotationDirection _Direction);
 };
 
